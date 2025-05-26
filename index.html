@@ -9,17 +9,16 @@
   <!-- 自作CSS -->
   <link href="style.css" rel="stylesheet" />
   <!-- reCAPTCHA -->
-  <script src="https://www.google.com/recaptcha/api.js?render=あなたのサイトキー"></script>
+  <script src="https://www.google.com/recaptcha/api.js?render=6Ld9SUkrAAAAAIrAHTAhYNTvMPGc8ccHgEkDVAA3"></script>
   <!-- JS -->
   <script defer src="form.js"></script>
 </head>
 <body class="p-6">
   <form id="reservationForm" class="max-w-md mx-auto bg-white p-6 rounded-xl shadow-md space-y-4">
     <h2 class="text-xl font-bold text-center">予約フォーム</h2>
-    <input type="text" name="name" placeholder="お名前" required class="w-full p-2 border rounded" />
-    <input type="email" name="email" placeholder="メールアドレス" required class="w-full p-2 border rounded" />
-    <input type="datetime-local" name="datetime" required class="w-full p-2 border rounded" />
-    <input type="hidden" name="token" id="recaptchaToken" />
+    <input type="text" id="name" name="name" placeholder="お名前" required class="w-full p-2 border rounded" />
+    <input type="email" id="email" name="email" placeholder="メールアドレス" required class="w-full p-2 border rounded" />
+    <input type="datetime-local" id="date" name="datetime" required class="w-full p-2 border rounded" />
     <button type="submit" class="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600">予約する</button>
   </form>
 </body>
