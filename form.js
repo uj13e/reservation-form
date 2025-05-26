@@ -2,7 +2,7 @@ document.getElementById('reservationForm').addEventListener('submit', async (e) 
   e.preventDefault();
 
   const form = e.target;
-  const token = await grecaptcha.execute('あなたのサイトキー', { action: 'submit' });
+  const token = await grecaptcha.execute('6Ld9SUkrAAAAAIrAHTAhYNTvMPGc8ccHgEkDVAA3', { action: 'submit' });
   form.querySelector('#recaptchaToken').value = token;
 
   const formData = new FormData(form);
