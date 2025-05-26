@@ -1,28 +1,41 @@
-<script>
-  let userIP = '';
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>予約フォーム</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>予約フォーム</h1>
+    <form id="reserveForm">
+      <input type="text" name="name" placeholder="名前" required>
+      <input type="date" name="date" required>
+      <input type="time" name="time" required>
+      <button type="submit">予約する</button>
+    </form>
+    <div id="result"></div>
+  </div>
 
-  fetch('/api/get-ip')
-    .then(res => res.json())
-    .then(data => {
-      userIP = data.ip;
-      document.getElementById('ip').textContent = `あなたのIP: ${userIP}`;
+  <script>
+    document.getElementById("reserveForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const form = e.target;
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
+
+      const res = await fetch("/api/reserve", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      const result = await res.json();
+      const msg = document.getElementById("result");
+      msg.innerText = result.message;
+      msg.className = result.success ? "success" : "error";
+      if (result.success) form.reset();
     });
-
-  function submitForm() {
-    const name = document.getElementById('name').value;
-    const date = document.getElementById('date').value;
-    const time = document.getElementById('time').value;
-
-    fetch('/api/reserve', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ name, date, time })
-    })
-    .then(res => res.json())
-    .then(data => {
-      alert(data.message);
-    });
-  }
-</script>
+  </script>
+</body>
+</html>
