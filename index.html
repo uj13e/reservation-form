@@ -1,102 +1,28 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>予約フォーム</title>
-  <style>
-    body {
-      font-family: sans-serif;
-      background: linear-gradient(to bottom, #aee1f9, #ffffff);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-    .form-container {
-      background: white;
-      padding: 2rem;
-      border-radius: 1rem;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-      width: 300px;
-    }
-    .form-container h2 {
-      text-align: center;
-      font-size: 1.5rem;
-      margin-bottom: 1rem;
-    }
-    label {
-      font-size: 0.9rem;
-      margin-bottom: 0.3rem;
-      display: block;
-    }
-    input, button {
-      width: 100%;
-      padding: 0.6rem;
-      margin-bottom: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-    }
-    button {
-      background-color: #4caf50;
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    #ip {
-      font-size: 0.8rem;
-      color: #555;
-      text-align: center;
-    }
-  </style>
-</head>
-<body>
-  <div class="form-container">
-    <h2>予約フォーム</h2>
+<script>
+  let userIP = '';
 
-    <input type="text" id="name" placeholder="名前" />
+  fetch('/api/get-ip')
+    .then(res => res.json())
+    .then(data => {
+      userIP = data.ip;
+      document.getElementById('ip').textContent = `あなたのIP: ${userIP}`;
+    });
 
-    <label for="date">予約日を選択してください</label>
-    <input type="date" id="date" />
+  function submitForm() {
+    const name = document.getElementById('name').value;
+    const date = document.getElementById('date').value;
+    const time = document.getElementById('time').value;
 
-    <label for="time">予約時間を選択してください</label>
-    <input type="time" id="time" />
-
-    <button onclick="submitForm()">予約する</button>
-
-    <div id="ip">IPアドレス取得中...</div>
-  </div>
-
-  <script>
-    let userIP = '';
-
-    // IP取得
-    fetch('/api/get-ip')
-      .then(res => res.json())
-      .then(data => {
-        userIP = data.ip;
-        document.getElementById('ip').textContent = `あなたのIP: ${userIP}`;
-      })
-      .catch(() => {
-        document.getElementById('ip').textContent = 'IPアドレスを取得できませんでした';
-      });
-
-    function submitForm() {
-      const name = document.getElementById('name').value;
-      const date = document.getElementById('date').value;
-      const time = document.getElementById('time').value;
-
-      const formData = {
-        name,
-        date,
-        time,
-        ip: userIP
-      };
-
-      // ここで送信処理（例：ログに出す）
-      console.log('予約内容:', formData);
-      alert(`予約完了！\nIP: ${userIP}`);
-    }
-  </script>
-</body>
-</html>
+    fetch('/api/reserve', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ name, date, time })
+    })
+    .then(res => res.json())
+    .then(data => {
+      alert(data.message);
+    });
+  }
+</script>
