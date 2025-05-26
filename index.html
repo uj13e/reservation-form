@@ -1,44 +1,102 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>予約フォーム</title>
-  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      font-family: sans-serif;
+      background: linear-gradient(to bottom, #aee1f9, #ffffff);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .form-container {
+      background: white;
+      padding: 2rem;
+      border-radius: 1rem;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      width: 300px;
+    }
+    .form-container h2 {
+      text-align: center;
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    label {
+      font-size: 0.9rem;
+      margin-bottom: 0.3rem;
+      display: block;
+    }
+    input, button {
+      width: 100%;
+      padding: 0.6rem;
+      margin-bottom: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+    button {
+      background-color: #4caf50;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    #ip {
+      font-size: 0.8rem;
+      color: #555;
+      text-align: center;
+    }
+  </style>
 </head>
 <body>
-  <div class="container">
-    <h1>予約フォーム</h1>
-    <form id="reserveForm">
-      <input type="text" name="name" placeholder="名前" required>
-      <input type="date" name="date" required>
-     <label for="date">予約日を選択してください</label>
-      <input type="time" name="time" required>
-      <label for="time">予約時間を選択してください</label>
-      <button type="submit">予約する</button>
-    </form>
-    <div id="result"></div>
+  <div class="form-container">
+    <h2>予約フォーム</h2>
+
+    <input type="text" id="name" placeholder="名前" />
+
+    <label for="date">予約日を選択してください</label>
+    <input type="date" id="date" />
+
+    <label for="time">予約時間を選択してください</label>
+    <input type="time" id="time" />
+
+    <button onclick="submitForm()">予約する</button>
+
+    <div id="ip">IPアドレス取得中...</div>
   </div>
 
   <script>
-    document.getElementById("reserveForm").addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const form = e.target;
-      const formData = new FormData(form);
-      const data = Object.fromEntries(formData.entries());
+    let userIP = '';
 
-      const res = await fetch("/api/reserve", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+    // IP取得
+    fetch('/api/get-ip')
+      .then(res => res.json())
+      .then(data => {
+        userIP = data.ip;
+        document.getElementById('ip').textContent = `あなたのIP: ${userIP}`;
+      })
+      .catch(() => {
+        document.getElementById('ip').textContent = 'IPアドレスを取得できませんでした';
       });
 
-      const result = await res.json();
-      const msg = document.getElementById("result");
-      msg.innerText = result.message;
-      msg.className = result.success ? "success" : "error";
-      if (result.success) form.reset();
-    });
+    function submitForm() {
+      const name = document.getElementById('name').value;
+      const date = document.getElementById('date').value;
+      const time = document.getElementById('time').value;
+
+      const formData = {
+        name,
+        date,
+        time,
+        ip: userIP
+      };
+
+      // ここで送信処理（例：ログに出す）
+      console.log('予約内容:', formData);
+      alert(`予約完了！\nIP: ${userIP}`);
+    }
   </script>
 </body>
 </html>
