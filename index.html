@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>予約フォーム</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>予約フォーム</h1>
+  <form id="reserveForm">
+    <label>名前: <input type="text" name="name" required></label><br>
+    <label>日付: <input type="date" name="date" required></label><br>
+    <label>時間: <input type="time" name="time" required></label><br>
+    <button type="submit">予約する</button>
+  </form>
+
+  <div id="result"></div>
+
+  <script>
+    document.getElementById("reserveForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      const data = Object.fromEntries(formData.entries());
+
+      const res = await fetch("/api/reserve", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+
+      const result = await res.json();
+      document.getElementById("result").innerText = result.message;
+    });
+  </script>
+</body>
+</html>
