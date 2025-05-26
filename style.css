@@ -1,21 +1,29 @@
+/* ベーススタイル */
 body {
   font-family: 'Arial', sans-serif;
   background: linear-gradient(to right, #74ebd5, #9face6);
+  margin: 0;
+  padding: 0;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  min-height: 100vh;
 }
 
+/* フォーム全体のボックス */
 .container {
   background: white;
   padding: 2rem;
   border-radius: 1rem;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
   text-align: center;
+  max-width: 400px;
+  width: 90%;
 }
 
-form input, form button {
+/* フォーム内の入力とボタン */
+form input,
+form button {
   display: block;
   width: 100%;
   margin: 1rem 0;
@@ -23,6 +31,7 @@ form input, form button {
   font-size: 1rem;
   border-radius: 0.5rem;
   border: 1px solid #ccc;
+  box-sizing: border-box;
 }
 
 button {
@@ -47,4 +56,22 @@ button:hover {
 
 .error {
   color: red;
+}
+
+/* ===== 📱 モバイル対応用メディアクエリ ===== */
+@media screen and (max-width: 480px) {
+  body {
+    padding: 1rem;
+  }
+
+  .container {
+    padding: 1.5rem;
+    font-size: 0.95rem;
+  }
+
+  form input,
+  form button {
+    padding: 0.65rem;
+    font-size: 1rem;
+  }
 }
