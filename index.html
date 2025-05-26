@@ -1,41 +1,26 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>予約フォーム</title>
-  <link rel="stylesheet" href="style.css">
+
+  <!-- Tailwind CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+  <!-- 自作CSS -->
+  <link href="style.css" rel="stylesheet" />
+  <!-- reCAPTCHA -->
+  <script src="https://www.google.com/recaptcha/api.js?render=あなたのサイトキー"></script>
+  <!-- JS -->
+  <script defer src="form.js"></script>
 </head>
-<body>
-  <div class="container">
-    <h1>予約フォーム</h1>
-    <form id="reserveForm">
-      <input type="text" name="name" placeholder="名前" required>
-      <input type="date" name="date" required>
-      <input type="time" name="time" required>
-      <button type="submit">予約する</button>
-    </form>
-    <div id="result"></div>
-  </div>
-
-  <script>
-    document.getElementById("reserveForm").addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const form = e.target;
-      const formData = new FormData(form);
-      const data = Object.fromEntries(formData.entries());
-
-      const res = await fetch("/api/reserve", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-
-      const result = await res.json();
-      const msg = document.getElementById("result");
-      msg.innerText = result.message;
-      msg.className = result.success ? "success" : "error";
-      if (result.success) form.reset();
-    });
-  </script>
+<body class="p-6">
+  <form id="reservationForm" class="max-w-md mx-auto bg-white p-6 rounded-xl shadow-md space-y-4">
+    <h2 class="text-xl font-bold text-center">予約フォーム</h2>
+    <input type="text" name="name" placeholder="お名前" required class="w-full p-2 border rounded" />
+    <input type="email" name="email" placeholder="メールアドレス" required class="w-full p-2 border rounded" />
+    <input type="datetime-local" name="datetime" required class="w-full p-2 border rounded" />
+    <input type="hidden" name="token" id="recaptchaToken" />
+    <button type="submit" class="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600">予約する</button>
+  </form>
 </body>
 </html>
