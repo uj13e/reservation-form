@@ -1,26 +1,22 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>予約フォーム</title>
-
-  <!-- Tailwind CDN -->
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
-  <!-- 自作CSS -->
-  <link href="style.css" rel="stylesheet" />
-  <!-- reCAPTCHA -->
-  <script src="https://www.google.com/recaptcha/api.js?render=6Ld9SUkrAAAAAIrAHTAhYNTvMPGc8ccHgEkDVAA3"></script>
-  <!-- JS -->
-  <script defer src="form.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://www.google.com/recaptcha/api.js?render=あなたのサイトキー"></script>
 </head>
-<body class="p-6">
-  <form id="reservationForm" class="max-w-md mx-auto bg-white p-6 rounded-xl shadow-md space-y-4">
-    <h2 class="text-xl font-bold text-center">予約フォーム</h2>
-    <input type="text" name="name" placeholder="お名前" required class="w-full p-2 border rounded" />
-    <input type="email" name="email" placeholder="メールアドレス" required class="w-full p-2 border rounded" />
-    <input type="datetime-local" name="datetime" required class="w-full p-2 border rounded" />
-    <input type="hidden" name="token" id="recaptchaToken" />
-    <button type="submit" class="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600">予約する</button>
+<body>
+  <form>
+    <label for="name">名前</label>
+    <input type="text" id="name" required>
+
+    <label for="date">日付</label>
+    <input type="date" id="date" required>
+
+    <button type="submit">予約する</button>
   </form>
+
+  <script src="form.js"></script>
 </body>
 </html>
