@@ -1,12 +1,27 @@
+let reservations = []; // ⚠ メモリ上のみ。Vercelでは再起動で消える
+
 export default function handler(req, res) {
   if (req.method === "POST") {
     const { name, date, time } = req.body;
 
-    console.log("予約情報:", { name, date, time });
+    const isDuplicate = reservations.some(r => r.date === date && r.time === time);
+    if (isDuplicate) {
+      res.status(409).json({
+        success: false,
+        message: `⚠️ すでに ${date} の ${time} に予約があります。`,
+      });
+      return;
+    }
 
-    // 実際の保存はここで行う（DBや外部サービス）
-    res.status(200).json({ message: `${name}さんの予約を ${date} の ${time} に受け付けました。` });
+    // 登録
+    reservations.push({ name, date, time });
+    console.log("現在の予約:", reservations);
+
+    res.status(200).json({
+      success: true,
+      message: `✅ ${name} さんの予約を ${date} の ${time} に受け付けました！`,
+    });
   } else {
-    res.status(405).json({ message: "POSTメソッドのみ対応しています。" });
+    res.status(405).json({ success: false, message: "POSTメソッドのみ対応しています。" });
   }
 }
