@@ -1,27 +1,30 @@
-let reservations = []; // ⚠ メモリ上のみ。Vercelでは再起動で消える
+// グローバルなメモリキャッシュ（Vercelでは1リクエストごとにリセットされる）
+const ipCache = new Map();
 
 export default function handler(req, res) {
-  if (req.method === "POST") {
-    const { name, date, time } = req.body;
+  const ip =
+    req.headers['x-forwarded-for']?.split(',')[0] ||
+    req.connection?.remoteAddress ||
+    'unknown';
 
-    const isDuplicate = reservations.some(r => r.date === date && r.time === time);
-    if (isDuplicate) {
-      res.status(409).json({
-        success: false,
-        message: `⚠️ すでに ${date} の ${time} に予約があります。`,
-      });
-      return;
-    }
+  const now = Date.now();
+  const lastAccess = ipCache.get(ip);
 
-    // 登録
-    reservations.push({ name, date, time });
-    console.log("現在の予約:", reservations);
-
-    res.status(200).json({
-      success: true,
-      message: `✅ ${name} さんの予約を ${date} の ${time} に受け付けました！`,
+  if (lastAccess && now - lastAccess < 60 * 60 * 1000) {
+    return res.status(429).json({
+      message: 'このIPアドレスからは1時間に1回のみ予約できます',
     });
-  } else {
-    res.status(405).json({ success: false, message: "POSTメソッドのみ対応しています。" });
   }
+
+  ipCache.set(ip, now);
+
+  // フロントエンドから送られてきたデータ
+  const { name, date, time } = req.body;
+
+  // 簡易ログ（実際はDBなどに保存）
+  console.log(`[予約] IP: ${ip}, 名前: ${name}, 日時: ${date} ${time}`);
+
+  return res.status(200).json({
+    message: '予約を受け付けました',
+  });
 }
