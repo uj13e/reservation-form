@@ -2,20 +2,17 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>予約フォーム</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="container">
-    <h2>予約フォーム</h2>
-
-    <input type="text" id="name" placeholder="名前" />
-
-    <label for="date">予約日を選択してください</label>
-    <input type="date" id="date" />
-
-    <label for="time">予約時間を選択してください</label>
-    <input type="time" id="time" />
+    <h1>予約フォーム</h1>
+    <form id="reserveForm">
+      <input type="text" name="name" placeholder="名前" required>
+      <input type="date" name="date" required>
+      <input type="time" name="time" required>
       <button type="submit">予約する</button>
     </form>
     <div id="result"></div>
