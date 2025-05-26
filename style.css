@@ -1,55 +1,61 @@
-/* 全体のリセット */
+/* ベースリセット */
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
+html {
+  font-size: 16px; /* ベースサイズ */
+}
+
 body {
-  font-family: sans-serif;
-  background-color: #f2f2f2;
+  font-family: 'Arial', sans-serif;
+  background-color: #f0f0f0;
   padding: 1rem;
   display: flex;
   justify-content: center;
 }
 
-/* フォームコンテナ */
+/* フォーム全体 */
 form {
   background: #fff;
   padding: 2rem;
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
   width: 100%;
   max-width: 500px;
 }
 
-/* ラベルと入力欄 */
+/* ラベル */
 label {
   display: block;
   margin-bottom: 0.5rem;
-  font-weight: bold;
+  font-size: 1.1rem;
+  font-weight: 600;
   color: #333;
 }
 
+/* 入力欄 */
 input[type="text"],
 input[type="date"] {
   width: 100%;
-  padding: 0.75rem;
+  padding: 1rem;
   margin-bottom: 1.5rem;
+  font-size: 1.1rem;
   border: 1px solid #ccc;
   border-radius: 8px;
-  font-size: 1rem;
 }
 
-/* 送信ボタン */
+/* ボタン */
 button {
   width: 100%;
-  padding: 0.75rem;
+  padding: 1rem;
+  font-size: 1.2rem;
   background-color: #4CAF50;
   color: white;
   border: none;
   border-radius: 8px;
-  font-size: 1rem;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
@@ -58,10 +64,10 @@ button:hover {
   background-color: #45a049;
 }
 
-/* レスポンシブ対応（タブレット〜PC） */
+/* レスポンシブ（タブレット以上） */
 @media (min-width: 600px) {
-  body {
-    padding: 2rem;
+  html {
+    font-size: 18px;
   }
 
   form {
