@@ -2,10 +2,11 @@ document.querySelector('form').addEventListener('submit', async (e) => {
   e.preventDefault();
 
   const name = document.querySelector('#name')?.value.trim();
+  const email = document.querySelector('#email')?.value.trim();
   const date = document.querySelector('#date')?.value;
 
-  if (!name || !date) {
-    alert("名前と日付を入力してください");
+  if (!name || !email || !date) {
+    alert("名前、メールアドレス、日付を入力してください");
     return;
   }
 
@@ -16,13 +17,12 @@ document.querySelector('form').addEventListener('submit', async (e) => {
         return;
       }
 
-      // ここで送信内容を確認
-      console.log("送信データ:", { name, date, token });
+      console.log("送信データ:", { name, email, date, token });
 
       const res = await fetch('/api/reserve', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, date, token }),
+        body: JSON.stringify({ name, email, date, token }),
       });
 
       const data = await res.json();
