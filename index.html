@@ -6,30 +6,35 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>予約フォーム</h1>
-  <form id="reserveForm">
-    <label>名前: <input type="text" name="name" required></label><br>
-    <label>日付: <input type="date" name="date" required></label><br>
-    <label>時間: <input type="time" name="time" required></label><br>
-    <button type="submit">予約する</button>
-  </form>
-
-  <div id="result"></div>
+  <div class="container">
+    <h1>予約フォーム</h1>
+    <form id="reserveForm">
+      <input type="text" name="name" placeholder="名前" required>
+      <input type="date" name="date" required>
+      <input type="time" name="time" required>
+      <button type="submit">予約する</button>
+    </form>
+    <div id="result"></div>
+  </div>
 
   <script>
     document.getElementById("reserveForm").addEventListener("submit", async (e) => {
       e.preventDefault();
-      const formData = new FormData(e.target);
+      const form = e.target;
+      const formData = new FormData(form);
       const data = Object.fromEntries(formData.entries());
 
       const res = await fetch("/api/reserve", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data)
+        body: JSON.stringify(data),
       });
 
       const result = await res.json();
-      document.getElementById("result").innerText = result.message;
+      const msg = document.getElementById("result");
+      msg.innerText = result.message;
+      msg.className = result.success ? "success" : "error";
+      if (result.success) form.reset();
     });
   </script>
 </body>
