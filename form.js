@@ -1,28 +1,32 @@
-document.getElementById('reservationForm').addEventListener('submit', async (e) => {
+document.querySelector('form').addEventListener('submit', async (e) => {
   e.preventDefault();
 
-  const form = e.target;
-  const token = await grecaptcha.execute('6Ld9SUkrAAAAAIrAHTAhYNTvMPGc8ccHgEkDVAA3', { action: 'submit' });
-  form.querySelector('#recaptchaToken').value = token;
+  const name = document.querySelector('#name')?.value.trim();
+  const date = document.querySelector('#date')?.value;
 
-  const formData = new FormData(form);
-  const email = formData.get('email');
-  const datetime = formData.get('datetime');
-
-  const cookieKey = `reserved_${email}_${datetime}`;
-  if (document.cookie.includes(cookieKey)) {
-    alert('すでにこの日時に予約されています。');
+  if (!name || !date) {
+    alert("名前と日付を入力してください");
     return;
   }
 
-  const res = await fetch('/api/reserve.js', {
-    method: 'POST',
-    body: JSON.stringify(Object.fromEntries(formData)),
-    headers: { 'Content-Type': 'application/json' }
+  grecaptcha.ready(() => {
+    grecaptcha.execute('6Ld9SUkrAAAAAIrAHTAhYNTvMPGc8ccHgEkDVAA3', { action: 'submit' }).then(async (token) => {
+      if (!token) {
+        alert("reCAPTCHA トークン取得に失敗しました");
+        return;
+      }
+
+      // ここで送信内容を確認
+      console.log("送信データ:", { name, date, token });
+
+      const res = await fetch('/api/reserve', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, date, token }),
+      });
+
+      const data = await res.json();
+      alert(data.message);
+    });
   });
-
-  const data = await res.json();
-  alert(data.message);
-
-  document.cookie = `${cookieKey}=1; max-age=86400`;
 });
